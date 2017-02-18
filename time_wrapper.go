@@ -11,25 +11,33 @@ import (
 	"time"
 )
 
-var help bool
 var verbose bool
 var days string
 var daysList []string
 var hourFrom int
 var hourTo int
 var tail []string
+var version string
+var printHelp bool
+var printVersion bool
 
 func initArgs() {
-	flag.BoolVar(&help, "help", false, "show help")
-	flag.BoolVar(&verbose, "verbose", false, "be verbose")
+	flag.BoolVar(&printHelp, "help", false, "print help and exit")
+	flag.BoolVar(&printVersion, "V", false, "print version and exit")
+	flag.BoolVar(&verbose, "v", false, "be verbose")
 	flag.StringVar(&days, "days", "0,1,2,3,4,5,6", "days from Sun - Sat")
 	flag.IntVar(&hourFrom, "from", 0, "active from, as an hour, 0-23 (default 0)")
 	flag.IntVar(&hourTo, "to", 24, "active until, as an hour, 0-24")
 
 	flag.Parse()
 
-	if help {
+	if printHelp {
 		flag.PrintDefaults()
+		os.Exit(0)
+	}
+
+	if printVersion {
+		fmt.Println("time_wrapper Version:", version)
 		os.Exit(0)
 	}
 
@@ -51,7 +59,7 @@ func initArgs() {
 }
 
 func main() {
-    initArgs()
+	initArgs()
 
 	now := time.Now().UTC()
 	nowDay := strconv.Itoa(int(now.Weekday()))

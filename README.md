@@ -22,7 +22,7 @@ check with this tool.
 
 ### License
 
-Copyright (C) 2016-2017 wywy Gmbh
+Copyright (C) 2016-2017 wywy GmbH
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 
