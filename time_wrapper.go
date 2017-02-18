@@ -11,31 +11,27 @@ import (
 	"time"
 )
 
-func main() {
-	// debugging help
-	// args := os.Args
-	// fmt.Println(args)
+var help bool
+var verbose bool
+var days string
+var daysList []string
+var hourFrom int
+var hourTo int
+var tail []string
 
-	helpPtrShort := flag.Bool("h", false, "show help")
-	helpPtrLong := flag.Bool("help", false, "show help")
-	verbosePtrShort := flag.Bool("v", false, "be verbose")
-	verbosePtrLong := flag.Bool("verbose", false, "be verbose")
-	daysPtr := flag.String("days", "0,1,2,3,4,5,6", "days from Sun - Sat")
-	fromPtr := flag.Int("from", 0, "active from, as an hour, 0-23 (default 0)")
-	toPtr := flag.Int("to", 24, "active until, as an hour, 0-24")
+func initArgs() {
+	flag.BoolVar(&help, "help", false, "show help")
+	flag.BoolVar(&verbose, "verbose", false, "be verbose")
+	flag.StringVar(&days, "days", "0,1,2,3,4,5,6", "days from Sun - Sat")
+	flag.IntVar(&hourFrom, "from", 0, "active from, as an hour, 0-23 (default 0)")
+	flag.IntVar(&hourTo, "to", 24, "active until, as an hour, 0-24")
 
 	flag.Parse()
 
-	showHelp := *helpPtrShort || *helpPtrLong
-	if showHelp {
+	if help {
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
-
-	isVerbose := *verbosePtrShort || *verbosePtrLong
-	days := strings.Split(*daysPtr, ",")
-	hourFrom := *fromPtr
-	hourTo := *toPtr
 
 	if hourFrom < 0 || hourFrom > 23 {
 		fmt.Println("Invalid hour for 'from':", hourFrom)
@@ -47,20 +43,26 @@ func main() {
 	}
 
 	// this is the binary to run, if the time's right
-	tail := flag.Args()
+	tail = flag.Args()
 	if len(tail) < 1 {
 		os.Exit(3)
 	}
 
+}
+
+func main() {
+    initArgs()
+
 	now := time.Now().UTC()
 	nowDay := strconv.Itoa(int(now.Weekday()))
 	nowHour := now.Hour()
+	daysList := strings.Split(days, ",")
 
 	// defaulting to not execute to make the next part easier
 	willExecute := false
 
-	for _, _day := range days {
-		if _day == nowDay {
+	for _, _day := range daysList {
+		if string(_day) == nowDay {
 			willExecute = true
 		}
 	}
@@ -75,7 +77,7 @@ func main() {
 		willExecute = false
 	}
 
-	if isVerbose {
+	if verbose {
 		fmt.Println("days : ", days)
 		fmt.Println("from : ", hourFrom)
 		fmt.Println("to   : ", hourTo)
