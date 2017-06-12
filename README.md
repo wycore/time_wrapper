@@ -1,5 +1,6 @@
 # time_wrapper - Execute or don't execute commands based on current time
-
+[![GitHub version](https://badge.fury.io/gh/wywygmbh%2Ftime_wrapper.svg)](https://badge.fury.io/gh/wywygmbh%2Ftime_wrapper)
+[![Build Status](https://travis-ci.org/wywygmbh/time_wrapper.svg?branch=master)](https://travis-ci.org/wywygmbh/time_wrapper)
 ### Motivation
 
 One way to not be woken up at night is to downgrade your checks
