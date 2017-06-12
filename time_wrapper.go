@@ -16,6 +16,8 @@ var days string
 var daysList []string
 var hourFrom int
 var hourTo int
+var timeZone string
+var location *time.Location
 var tail []string
 var version string
 var printHelp bool
@@ -28,6 +30,7 @@ func initArgs() {
 	flag.StringVar(&days, "days", "0,1,2,3,4,5,6", "days from Sun - Sat")
 	flag.IntVar(&hourFrom, "from", 0, "active from, as an hour, 0-23 (default 0)")
 	flag.IntVar(&hourTo, "to", 24, "active until, as an hour, 0-24")
+	flag.StringVar(&timeZone, "timezone", "UTC", "timezone e.g. 'Europe/Berlin'")
 
 	flag.Parse()
 
@@ -56,12 +59,18 @@ func initArgs() {
 		os.Exit(3)
 	}
 
+	var err error
+	if location, err = time.LoadLocation(timeZone); err != nil {
+		fmt.Println(err)
+		os.Exit(3)
+	}
+
 }
 
 func main() {
 	initArgs()
 
-	now := time.Now().UTC()
+	now := time.Now().In(location)
 	nowDay := strconv.Itoa(int(now.Weekday()))
 	nowHour := now.Hour()
 	daysList := strings.Split(days, ",")
@@ -86,14 +95,15 @@ func main() {
 	}
 
 	if verbose {
-		fmt.Println("days : ", days)
-		fmt.Println("from : ", hourFrom)
-		fmt.Println("to   : ", hourTo)
-		fmt.Println("tail : ", tail)
-		fmt.Println("now  : ", now)
-		fmt.Println("nowD : ", nowDay)
-		fmt.Println("nowH : ", nowHour)
-		fmt.Println("run? : ", willExecute)
+		fmt.Println("days     : ", days)
+		fmt.Println("from     : ", hourFrom)
+		fmt.Println("to       : ", hourTo)
+		fmt.Println("tail     : ", tail)
+		fmt.Println("timezone : ", location)
+		fmt.Println("now      : ", now)
+		fmt.Println("nowD     : ", nowDay)
+		fmt.Println("nowH     : ", nowHour)
+		fmt.Println("run?     : ", willExecute)
 	}
 
 	if !willExecute {
