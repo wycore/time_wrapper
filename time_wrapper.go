@@ -112,6 +112,7 @@ func main() {
 
 	// get the real path of the executable
 	binary, lookErr := exec.LookPath(tail[0])
+	tail = tail[1:]
 	if lookErr != nil {
 		fmt.Println(lookErr)
 		os.Exit(3)
