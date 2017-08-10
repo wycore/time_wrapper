@@ -7,6 +7,9 @@ all: build
 build:
 	GOPATH=$(GOPATH) $(GO) build -ldflags "-X main.version=`cat VERSION`"
 
+clean:
+	-rm time_wrapper
+
 fmt:
 	GOPATH=$(GOPATH) find . -name "*.go" | xargs gofmt -w -s
 

@@ -119,9 +119,14 @@ func main() {
 	env := os.Environ()
 
 	// execute, incl. stdout, stderr and exit code \o/
+	// > Exec invokes the execve(2) system call.
+	// this is why we leave tail alone and don't shift the first element
+	// > execve() does not return on success, and the text, data, bss,
+	// > and stack of the calling process are overwritten by that of
+	// > the program loaded.
 	execErr := syscall.Exec(binary, tail, env)
 	if execErr != nil {
-		fmt.Println(lookErr)
+		fmt.Println(execErr)
 		os.Exit(2)
 	}
 }
